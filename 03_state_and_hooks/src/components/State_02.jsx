@@ -18,6 +18,7 @@ const State_02 = () => {
       <h1>{count}</h1>
       {/* <input type="text" value={input} onChange={handleChange} /> */}
       <input type="text" value={input} onChange={(e)=>setInput(e.target.value)} />
+      {/* <input type="text" value={input} onChange={(e)=>handleChange(e)} /> */}
       <br />
       you have typed <h1>{input}</h1>
     </>

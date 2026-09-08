@@ -9,6 +9,10 @@ const PrevState_04 = () => {
     e.preventDefault();
 
     setUsers((prev)=>[...prev,input]);
+
+    // setUsers(()=>[input]);
+
+
   };
 
   console.log("users",users)
