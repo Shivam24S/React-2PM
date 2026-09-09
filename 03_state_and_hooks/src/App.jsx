@@ -3,6 +3,8 @@ import State_01 from "./components/State_01";
 import State_02 from "./components/State_02";
 import PrevState_03 from "./components/prevState_03";
 import PrevState_04 from "./components/PrevState_04";
+import State_04 from "./components/State_04";
+import ObjectUseState from "./components/ObjectUsestate_05";
 
 const App = () => {
   const [counter, setCounter] = useState(10);
@@ -19,7 +21,11 @@ const App = () => {
 
       {/* <PrevState_03 /> */}
 
-      <PrevState_04/>
+      {/* <PrevState_04/> */}
+
+      {/* <State_04/> */}
+
+      <ObjectUseState/>
     </>
   );
 };
