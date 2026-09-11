@@ -1,6 +1,7 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
-const UseEffect_Fetch_02 = () => {
+const Axios_03 = () => {
   const [user, setUser] = useState([]);
 
   const [error, setError] = useState(null);
@@ -9,19 +10,14 @@ const UseEffect_Fetch_02 = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const res = await fetch("https://jsonplaceholder.typicode.com/users");
+      const res = await axios.post("https://jsonplaceholder.typicode.com/users");
 
-      const data = await res.json();
 
-      if (!res.ok) {
-        setError("failed to fetch data");
-      }
-
-      if (data.length === 0) {
+      if (res.data.length === 0) {
         setError("no user data found");
       }
 
-      setUser(data);
+      setUser(res.data);
     };
 
     if (fetchData === true) {
@@ -63,4 +59,4 @@ const UseEffect_Fetch_02 = () => {
   );
 };
 
-export default UseEffect_Fetch_02;
+export default Axios_03;
