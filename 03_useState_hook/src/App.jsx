@@ -25,7 +25,8 @@ const App = () => {
 
       {/* <State_04/> */}
 
-      <ObjectUseState/>
+      {/* <ObjectUseState/> */}
+      
     </>
   );
 };
