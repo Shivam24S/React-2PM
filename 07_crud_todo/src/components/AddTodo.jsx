@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const AddTodo = () => {
+const AddTodo = ({ handleAdd }) => {
   const [input, setInput] = useState({
     task: "",
     description: "",
@@ -17,6 +17,10 @@ const AddTodo = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    handleAdd(input);
+
+    setInput({ task: "", description: "" });
   };
 
   console.log("task", input.task);

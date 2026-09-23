@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddTodo from "./components/AddTodo";
+import ListTodo from "./components/ListTodo";
 
 const App = () => {
   const initialTodos = [
@@ -17,12 +18,23 @@ const App = () => {
 
   const [todos, setTodos] = useState(initialTodos);
 
+  const handleAdd = (input) => {
+    const newTodo = {
+      id: new Date().getTime(),
+      ...input,
+    };
 
-  
+    setTodos((prev) => [...prev, newTodo]);
+  };
+
+  console.log("app todo", todos);
 
   return (
     <>
-      <AddTodo />
+      <AddTodo handleAdd={handleAdd} />
+      <br />
+      <br />
+      <ListTodo todos={todos} />
     </>
   );
 };
