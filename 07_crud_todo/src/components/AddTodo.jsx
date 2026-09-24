@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const AddTodo = ({ handleAdd }) => {
+const AddTodo = ({ handleAdd, editVal }) => {
   const [input, setInput] = useState({
     task: "",
     description: "",
   });
+
+
+  useEffect(() => {
+
+    editVal ? setInput(editVal) : null
+
+  }, [editVal])
 
   const handleChange = (field, e) => {
     setInput((prev) => {
@@ -48,7 +55,7 @@ const AddTodo = ({ handleAdd }) => {
         />
         <br />
         <br />
-        <button type="submit">add</button>
+        <button type="submit">{editVal ? "update" : "add"}</button>
       </form>
     </>
   );
