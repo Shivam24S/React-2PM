@@ -1,10 +1,20 @@
-const ListTodo = ({ todos, handleDelete, handleEdit }) => {
+import { useState } from "react";
+
+const ListTodo = ({ todos, handleDelete, handleEdit, handleToggle }) => {
+
+
+
+
+
+
+
     return (
         <>
             <table border={2}>
                 <thead>
                     <tr>
                         <th>sr</th>
+                        <th>status</th>
                         <th>task</th>
                         <th>Description</th>
                         <th colSpan={2}>Actions</th>
@@ -15,6 +25,13 @@ const ListTodo = ({ todos, handleDelete, handleEdit }) => {
                         return (
                             <tr key={t.id}>
                                 <td>{index + 1}</td>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        checked={t.completed}
+                                        onChange={() => handleToggle(t.id)}
+                                    />
+                                </td>
                                 <td>{t.task}</td>
                                 <td>{t.description}</td>
 

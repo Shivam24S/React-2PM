@@ -8,17 +8,22 @@ const App = () => {
       id: 1,
       task: "learn react",
       description: "you have to learn daily react concept",
+      completed: true,
     },
     {
       id: 2,
       task: "practice react code",
       description: "you have to practice daily react code",
+      completed: false,
     },
   ];
 
   const [todos, setTodos] = useState(initialTodos);
 
   const [editVal, setEditVal] = useState(null);
+
+
+  console.log("todos", todos)
 
   const handleAdd = (input) => {
     if (!input.task || !input.description) {
@@ -37,6 +42,7 @@ const App = () => {
         id: new Date().getTime(),
         task: input.task,
         description: input.description,
+        completed: false,
       };
 
       setTodos((prev) => [...prev, newTodo]);
@@ -56,6 +62,12 @@ const App = () => {
 
   console.log("edit val", editVal);
 
+  const handleToggle = (id) => {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
+    );
+  };
+
   return (
     <>
       <AddTodo handleAdd={handleAdd} editVal={editVal} />
@@ -65,6 +77,7 @@ const App = () => {
         todos={todos}
         handleDelete={handleDelete}
         handleEdit={handleEdit}
+        handleToggle={handleToggle}
       />
     </>
   );
