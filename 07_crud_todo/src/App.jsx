@@ -1,6 +1,7 @@
 import { useState } from "react";
 import AddTodo from "./components/AddTodo";
 import ListTodo from "./components/ListTodo";
+import Stats from "./components/Stats";
 
 const App = () => {
   const initialTodos = [
@@ -68,9 +69,20 @@ const App = () => {
     );
   };
 
+  const totalTask = todos.length
+
+  const completedTask = todos.filter((t) => t.completed === true).length
+
+  const pendingTask = totalTask - completedTask
+
   return (
     <>
       <AddTodo handleAdd={handleAdd} editVal={editVal} />
+
+      <br />
+      <br />
+
+      <Stats totalTask={totalTask} completedTask={completedTask} pendingTask={pendingTask} />
       <br />
       <br />
       <ListTodo
