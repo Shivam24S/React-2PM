@@ -1,16 +1,23 @@
-import React from "react";
-import Home from "./components/Home";
-import About from "./components/About";
+import React, { lazy } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "./routes/MainLayout";
 import Service from "./components/Service";
 import Product from "./components/Product";
+import ErrorPage from "./components/Error";
+import Form from "./components/Form";
+import { Suspense } from "react";
+import Loading from "./components/Loading";
 
 const App = () => {
+  const Home = lazy(() => import("./components/Home"));
+
+  const About = lazy(() => import("./components/About"));
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <MainLayout />,
+      errorElement: <ErrorPage />,
       children: [
         {
           index: true,
@@ -18,24 +25,29 @@ const App = () => {
         },
         {
           path: "about",
-          element: <About />
+          element: <About />,
         },
         {
           path: "service",
-          element: <Service />
+          element: <Service />,
         },
         {
           path: "pro/:id",
-          element: <Product />
-        }
+          element: <Product />,
+        },
+        {
+          path: "auth",
+          element: <Form />,
+        },
       ],
-
     },
   ]);
 
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <Suspense fallback={<Loading />}>
+        <RouterProvider router={router}></RouterProvider>
+      </Suspense>
     </>
   );
 };
