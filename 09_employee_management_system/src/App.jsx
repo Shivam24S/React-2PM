@@ -3,6 +3,7 @@ import MainLayout from "./routes/MainLayout";
 import Error from "./ui/Error";
 import { lazy, Suspense } from "react";
 import Loading from "./ui/Loading";
+import AddEmployee from "./components/AddEmployee";
 
 const Employee = lazy(() => import("./components/Employee"));
 
@@ -20,7 +21,10 @@ const App = () => {
         {
           index: true,
           element: <Employee />,
-        },
+        }, {
+          path: "/add",
+          element: <AddEmployee />
+        }
       ],
     },
   ]);

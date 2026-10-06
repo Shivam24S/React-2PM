@@ -15,3 +15,26 @@ export const getAllEmployee = async () => {
 
   return data.employees;
 };
+
+export const addEmployee = async (empData) => {
+  try {
+    const res = await fetch(`${BASEURL}/add`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(empData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "failed to add employee data");
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
