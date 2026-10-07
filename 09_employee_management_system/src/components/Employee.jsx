@@ -1,6 +1,9 @@
-import { Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 
-import { getAllEmployee } from "../api/studentFetch";
+// import { getAllEmployee } from "../api/studentFetch";
+
+import { getAllEmployee } from "../api/studentAxios"
+
 import { useEffect, useState } from "react";
 import Loading from "../ui/Loading";
 
@@ -50,6 +53,7 @@ const Employee = () => {
           <th>Salary</th>
           <th> Status </th>
           <th>Mobile</th>
+          <th colSpan={2} >Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -65,6 +69,8 @@ const Employee = () => {
               <td>{emp.salary}</td>
               <td>{emp.status}</td>
               <td>{emp.mobile}</td>
+              <td><Button variant="warning" >Edit</Button></td>
+              <td><Button variant="danger" >Delete</Button></td>
             </tr>
           );
         })}
