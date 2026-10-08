@@ -3,7 +3,7 @@ import MainLayout from "./routes/MainLayout";
 import Error from "./ui/Error";
 import { lazy, Suspense } from "react";
 import Loading from "./ui/Loading";
-import AddEmployee from "./components/AddEmployee";
+import EmployeeForm from "./components/EmployeeForm";
 
 const Employee = lazy(() => import("./components/Employee"));
 
@@ -23,7 +23,10 @@ const App = () => {
           element: <Employee />,
         }, {
           path: "/add",
-          element: <AddEmployee />
+          element: <EmployeeForm />
+        }, {
+          path: "/edit/:id",
+          element: <EmployeeForm />
         }
       ],
     },

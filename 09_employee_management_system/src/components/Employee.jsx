@@ -2,10 +2,13 @@ import { Button, Table } from "react-bootstrap";
 
 // import { getAllEmployee } from "../api/studentFetch";
 
-import { getAllEmployee } from "../api/studentAxios"
+import { getAllEmployee } from "../api/studentAxios";
 
 import { useEffect, useState } from "react";
 import Loading from "../ui/Loading";
+// import { deleteEmployee } from "../api/studentFetch";
+import { deleteEmployee } from "../api/studentAxios";
+import { useNavigate } from "react-router-dom";
 
 const Employee = () => {
   const [employee, setEmployee] = useState([]);
@@ -13,6 +16,9 @@ const Employee = () => {
   const [loading, setLoading] = useState(false);
 
   const [error, setError] = useState(null);
+
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     loadData();
@@ -35,10 +41,29 @@ const Employee = () => {
   if (loading) {
     return <Loading></Loading>;
   } else if (error) {
-    return <h1 className="text-center" style={{ color: "red" }}>
-      {error.message}
-    </h1>;
+    return (
+      <h1 className="text-center" style={{ color: "red" }}>
+        {error.message}
+      </h1>
+    );
   }
+
+
+
+
+
+
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteEmployee(id);
+
+      await loadData();
+    } catch (error) {
+      console.log(error);
+      throw error();
+    }
+  };
 
   return (
     <Table striped bordered hover className="mt-4">
@@ -53,7 +78,7 @@ const Employee = () => {
           <th>Salary</th>
           <th> Status </th>
           <th>Mobile</th>
-          <th colSpan={2} >Actions</th>
+          <th colSpan={2}>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -69,8 +94,14 @@ const Employee = () => {
               <td>{emp.salary}</td>
               <td>{emp.status}</td>
               <td>{emp.mobile}</td>
-              <td><Button variant="warning" >Edit</Button></td>
-              <td><Button variant="danger" >Delete</Button></td>
+              <td>
+                <Button variant="warning" onClick={() => navigate(`/edit/${emp._id}`)}  >Edit</Button>
+              </td>
+              <td>
+                <Button variant="danger" onClick={() => handleDelete(emp._id)}>
+                  Delete
+                </Button>
+              </td>
             </tr>
           );
         })}

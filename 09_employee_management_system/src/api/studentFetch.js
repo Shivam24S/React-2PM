@@ -38,3 +38,64 @@ export const addEmployee = async (empData) => {
     throw error;
   }
 };
+
+export const deleteEmployee = async (id) => {
+  try {
+    const res = await fetch(`${BASEURL}/${id}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "failed to delete employee data");
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
+
+export const updateEmployee = async (id, empData) => {
+  try {
+    const res = await fetch(`${BASEURL}/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(empData),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.message || "failed to delete employee data");
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};
+
+export const getEmpById = async (id) => {
+  try {
+    const res = await fetch(`${BASEURL}/${id}`);
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.message || "failed to delete employee data");
+    }
+
+
+    
+
+    return data.employee;
+  } catch (error) {
+    console.log(error.message);
+    throw error;
+  }
+};

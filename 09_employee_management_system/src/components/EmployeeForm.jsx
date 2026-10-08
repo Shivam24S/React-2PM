@@ -6,15 +6,59 @@ import Row from "react-bootstrap/Row";
 import * as formik from "formik";
 
 // import { addEmployee } from "../api/studentFetch";
-import { addEmployee } from "../api/studentAxios"
+import { addEmployee, getEmpById } from "../api/studentAxios";
 
 import validationSchema from "../validation/validation";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-function FormExample() {
+function EmployeeForm() {
   const { Formik } = formik;
 
   const navigate = useNavigate();
+
+  const { id } = useParams();
+
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    emp_Id: 0,
+    email: "",
+    designation: "",
+    department: "",
+    salary: "",
+    status: "",
+    mobile: "",
+  });
+
+
+  console.log("intial values", initialValues)
+
+  useEffect(() => {
+    const fetchEmployeeDetail = async () => {
+      try {
+        const emp = await getEmpById(id);
+
+
+        console.log("efferct emp", emp)
+
+        setInitialValues({
+          name: emp.name,
+          emp_Id: emp.emp_Id,
+          email: emp.email,
+          designation: emp.designation,
+          department: emp.department,
+          salary: emp.salary,
+          status: emp.status,
+          mobile: emp.mobile,
+        })
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchEmployeeDetail();
+  }, [id]);
 
   return (
     <Formik
@@ -29,19 +73,10 @@ function FormExample() {
           navigate("/");
         }
       }}
-      initialValues={{
-        name: "",
-        emp_Id: 0,
-        email: "",
-        designation: "",
-        department: "",
-        salary: "",
-        status: "",
-        mobile: "",
-      }}
+      initialValues={initialValues}
     >
       {({ handleSubmit, handleChange, values, touched, errors }) => (
-        <Form noValidate onSubmit={handleSubmit}>
+        <Form noValidate onSubmit={handleSubmit} className="mt-5">
           <Row className="mb-3">
             <Form.Group
               as={Col}
@@ -53,7 +88,7 @@ function FormExample() {
               <Form.Control
                 type="text"
                 name="name"
-                value={values.name}
+                value={initialValues.name}
                 onChange={handleChange}
                 isValid={touched.name && !errors.name}
               />
@@ -69,7 +104,7 @@ function FormExample() {
               <Form.Control
                 type="number"
                 name="emp_Id"
-                value={values.emp_Id}
+                value={initialValues.emp_Id}
                 onChange={handleChange}
                 isValid={touched.emp_Id && !errors.emp_Id}
               />
@@ -85,7 +120,7 @@ function FormExample() {
                   placeholder="enter email"
                   aria-describedby="inputGroupPrepend"
                   name="email"
-                  value={values.email}
+                  value={initialValues.email}
                   onChange={handleChange}
                   isInvalid={!!errors.email}
                 />
@@ -107,7 +142,7 @@ function FormExample() {
                 type="text"
                 placeholder="designation"
                 name="designation"
-                value={values.designation}
+                value={initialValues.designation}
                 onChange={handleChange}
                 isInvalid={!!errors.designation}
               />
@@ -127,7 +162,7 @@ function FormExample() {
                 type="text"
                 placeholder="department"
                 name="department"
-                value={values.department}
+                value={initialValues.department}
                 onChange={handleChange}
                 isInvalid={!!errors.department}
               />
@@ -146,7 +181,7 @@ function FormExample() {
                 type="number"
                 placeholder="Salary"
                 name="salary"
-                value={values.salary}
+                value={initialValues.salary}
                 onChange={handleChange}
                 isInvalid={!!errors.salary}
               />
@@ -162,6 +197,7 @@ function FormExample() {
               type="text"
               required
               name="status"
+              value={initialValues.status}
               onChange={handleChange}
               isInvalid={!!errors.status}
             />
@@ -176,6 +212,7 @@ function FormExample() {
               type="number"
               required
               name="mobile"
+              value={initialValues.mobile}
               onChange={handleChange}
               isInvalid={!!errors.mobile}
             />
@@ -191,4 +228,4 @@ function FormExample() {
   );
 }
 
-export default FormExample;
+export default EmployeeForm;
