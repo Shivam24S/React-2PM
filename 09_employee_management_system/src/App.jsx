@@ -4,40 +4,39 @@ import Error from "./ui/Error";
 import { lazy, Suspense } from "react";
 import Loading from "./ui/Loading";
 import EmployeeForm from "./components/EmployeeForm";
+import ToastProvider from "./ui/ToastProvider";
 
 const Employee = lazy(() => import("./components/Employee"));
 
-const BASEURL = import.meta.env.VITE_BASE_URL;
-
-console.log("baseUrl", BASEURL);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <MainLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Employee />,
+      },
+      {
+        path: "/add",
+        element: <EmployeeForm />,
+      },
+      {
+        path: "/edit/:id",
+        element: <EmployeeForm />,
+      },
+    ],
+  },
+]);
 
 const App = () => {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <MainLayout />,
-      errorElement: <Error />,
-      children: [
-        {
-          index: true,
-          element: <Employee />,
-        }, {
-          path: "/add",
-          element: <EmployeeForm />
-        }, {
-          path: "/edit/:id",
-          element: <EmployeeForm />
-        }
-      ],
-    },
-  ]);
-
   return (
-    <>
-      <Suspense fallback={<Loading />}>
-        <RouterProvider router={router}></RouterProvider>
+    <ToastProvider>
+      <Suspense fallback={<Loading fullPage />}>
+        <RouterProvider router={router} />
       </Suspense>
-    </>
+    </ToastProvider>
   );
 };
 

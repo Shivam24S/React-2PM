@@ -2,81 +2,70 @@ import axios from "axios";
 
 const BASEURL = import.meta.env.VITE_BASE_URL;
 
-export const getAllEmployee = async () => {
-  try {
-    const res = await axios(`${BASEURL}/all-Employee`);
+const api = axios.create({
+  baseURL: BASEURL,
+  headers: { "Content-Type": "application/json" },
+});
 
-    console.log("res", res);
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      "Network error, please try again";
 
-    if (res.status !== 200) {
-      throw new Error("failed to fetch employee data");
-    }
-
-    return res.data.employees;
-  } catch (error) {
-    console.log(error.message);
-    throw error;
+    return Promise.reject(new Error(message));
   }
+);
+
+export const getAllEmployee = async () => {
+  const res = await api.get("/all-Employee");
+
+  if (res.status !== 200) {
+    throw new Error("failed to fetch employee data");
+  }
+
+  return res.data.employees;
 };
 
 export const addEmployee = async (empData) => {
-  try {
-    const res = await axios.post(`${BASEURL}/add`, empData);
+  const res = await api.post("/add", empData);
 
-    if (res.status !== 201) {
-      throw new Error("failed to add employee data");
-    }
-
-    return res.data.employees;
-  } catch (error) {
-    console.log(error.message);
-    throw error;
+  if (res.status !== 201) {
+    throw new Error("failed to add employee data");
   }
+
+  return res.data;
 };
 
 export const deleteEmployee = async (id) => {
-  try {
-    const res = await axios.delete(`${BASEURL}/${id}`);
+  const res = await api.delete(`/${id}`);
 
-    if (res.status !== 200) {
-      throw new Error("failed to delete employee data");
-    }
-
-    return res.data.employees;
-  } catch (error) {
-    console.log(error.message);
-    throw error;
+  if (res.status !== 200) {
+    throw new Error("failed to delete employee data");
   }
+
+  return res.data;
 };
 
 export const updateEmployee = async (id, empData) => {
-  try {
-    const res = await axios.patch(`${BASEURL}/${id}`, empData);
+  const res = await api.patch(`/${id}`, empData);
 
-    if (res.status !== 200) {
-      throw new Error("failed to delete employee data");
-    }
-
-    return res.data;
-  } catch (error) {
-    console.log(error.message);
-    throw error;
+  if (res.status !== 200) {
+    throw new Error("failed to update employee data");
   }
+
+  return res.data;
 };
 
 export const getEmpById = async (id) => {
-  try {
-    const res = await axios(`${BASEURL}/${id}`);
+  const res = await api.get(`/${id}`);
 
-    if (res.status !== 200) {
-      throw new Error("failed to delete employee data");
-    }
-
-    console.log("emp update response", res.data.employee);
-
-    return res.data.employee;
-  } catch (error) {
-    console.log(error.message);
-    throw error;
+  if (res.status !== 200) {
+    throw new Error("failed to fetch employee details");
   }
+
+  return res.data.employee;
 };
