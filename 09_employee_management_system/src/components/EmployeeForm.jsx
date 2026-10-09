@@ -6,11 +6,14 @@ import Row from "react-bootstrap/Row";
 import * as formik from "formik";
 
 // import { addEmployee } from "../api/studentFetch";
-import { addEmployee, getEmpById } from "../api/studentAxios";
+import { updateEmployee } from "../api/studentFetch";
+import { addEmployee, getEmpById, } from "../api/studentAxios";
 
 import validationSchema from "../validation/validation";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { boolean } from "yup";
+
 
 function EmployeeForm() {
   const { Formik } = formik;
@@ -30,16 +33,14 @@ function EmployeeForm() {
     mobile: "",
   });
 
-
-  console.log("intial values", initialValues)
-
   useEffect(() => {
     const fetchEmployeeDetail = async () => {
       try {
+        if (!id) {
+          return;
+        }
+
         const emp = await getEmpById(id);
-
-
-        console.log("efferct emp", emp)
 
         setInitialValues({
           name: emp.name,
@@ -50,8 +51,7 @@ function EmployeeForm() {
           salary: emp.salary,
           status: emp.status,
           mobile: emp.mobile,
-        })
-
+        });
       } catch (error) {
         console.log(error);
       }
@@ -63,15 +63,21 @@ function EmployeeForm() {
   return (
     <Formik
       className="mt-5"
+      enableReinitialize
       validationSchema={validationSchema}
-      onSubmit={(values, { resetForm }) => {
-        const result = addEmployee(values);
+      onSubmit={async (values, { resetForm }) => {
+        if (id) {
+          await updateEmployee(id, {
+            name: values.name,
+            email: values.email,
+            mobile: values.mobile,
+          });
+        } else {
+          addEmployee(values);
+        }
 
         resetForm();
-
-        if (result) {
-          navigate("/");
-        }
+        navigate("/");
       }}
       initialValues={initialValues}
     >
@@ -88,8 +94,9 @@ function EmployeeForm() {
               <Form.Control
                 type="text"
                 name="name"
-                value={initialValues.name}
+                value={values.name}
                 onChange={handleChange}
+
                 isValid={touched.name && !errors.name}
               />
               <Form.Control.Feedback tooltip>Looks good!</Form.Control.Feedback>
@@ -104,7 +111,8 @@ function EmployeeForm() {
               <Form.Control
                 type="number"
                 name="emp_Id"
-                value={initialValues.emp_Id}
+                disabled={!!id}
+                value={values.emp_Id}
                 onChange={handleChange}
                 isValid={touched.emp_Id && !errors.emp_Id}
               />
@@ -120,7 +128,7 @@ function EmployeeForm() {
                   placeholder="enter email"
                   aria-describedby="inputGroupPrepend"
                   name="email"
-                  value={initialValues.email}
+                  value={values.email}
                   onChange={handleChange}
                   isInvalid={!!errors.email}
                 />
@@ -140,9 +148,10 @@ function EmployeeForm() {
               <Form.Label>Designation</Form.Label>
               <Form.Control
                 type="text"
+                  disabled={!!id}
                 placeholder="designation"
                 name="designation"
-                value={initialValues.designation}
+                value={values.designation}
                 onChange={handleChange}
                 isInvalid={!!errors.designation}
               />
@@ -161,8 +170,9 @@ function EmployeeForm() {
               <Form.Control
                 type="text"
                 placeholder="department"
+                  disabled={!!id}
                 name="department"
-                value={initialValues.department}
+                value={values.department}
                 onChange={handleChange}
                 isInvalid={!!errors.department}
               />
@@ -181,7 +191,8 @@ function EmployeeForm() {
                 type="number"
                 placeholder="Salary"
                 name="salary"
-                value={initialValues.salary}
+                  disabled={!!id}
+                value={values.salary}
                 onChange={handleChange}
                 isInvalid={!!errors.salary}
               />
@@ -196,8 +207,9 @@ function EmployeeForm() {
             <Form.Control
               type="text"
               required
+                disabled={!!id}
               name="status"
-              value={initialValues.status}
+              value={values.status}
               onChange={handleChange}
               isInvalid={!!errors.status}
             />
@@ -212,7 +224,7 @@ function EmployeeForm() {
               type="number"
               required
               name="mobile"
-              value={initialValues.mobile}
+              value={values.mobile}
               onChange={handleChange}
               isInvalid={!!errors.mobile}
             />
@@ -221,7 +233,7 @@ function EmployeeForm() {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Button type="submit">Submit form</Button>
+          <Button type="submit">{id ? "update " : "Submit"}</Button>
         </Form>
       )}
     </Formik>
