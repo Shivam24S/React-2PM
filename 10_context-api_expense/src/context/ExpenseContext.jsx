@@ -5,10 +5,16 @@ export const expenseContext = createContext({
   handleAdd: () => { },
   handleDelete: () => { },
   handleEdit: () => { },
-  editVal: null
+  editVal: null,
+  credit: 0,
+  debit: 0,
+  balance: 0
 });
 
+
+
 const ExpenseContext = ({ children }) => {
+
   const initialValues = [
     {
       id: 1,
@@ -28,7 +34,6 @@ const ExpenseContext = ({ children }) => {
       Category: "general expense",
       ExpenseType: "Debit",
     },
-
   ];
 
   const [expenseList, setExpenseList] = useState(initialValues);
@@ -36,40 +41,67 @@ const ExpenseContext = ({ children }) => {
   const [editVal, setEditVal] = useState(null);
 
   const handleAdd = (input) => {
+    if (!input) {
+      alert("all fields are required");
+    } else if (editVal) {
+      setExpenseList((prev) =>
+        prev.map((l) => (l.id === editVal.id ? { ...l, ...input } : l)),
+      );
 
-    console.log("incomming input", input)
-    const newExpense = {
-      id: new Date().getTime(),
-      ...input,
-    };
+      setEditVal(null)
+    } else {
+      const newExpense = {
+        id: new Date().getTime(),
+        ...input,
+      };
 
-
-
-    setExpenseList((p) => [...p, newExpense]);
+      setExpenseList((p) => [...p, newExpense]);
+    }
   };
 
   const handleDelete = (id) => {
     console.log("delete id", id);
-    const deleteExpense = expenseList.filter((prev) => (prev.id !== id));
+    const deleteExpense = expenseList.filter((prev) => prev.id !== id);
     setExpenseList(deleteExpense);
-
-  }
-
-
+  };
 
   const handleEdit = (id) => {
     const editExpense = expenseList.find((prev) => prev.id === id);
     setEditVal(editExpense);
-  }
+  };
 
-  console.log("expenseList", expenseList);
+
+  const credit = expenseList.filter((t) => t.ExpenseType === "Credit").reduce((acc, curr) => {
+    return acc += Number(curr.Amount)
+  }, 0)
+
+
+
+  const debit = expenseList.filter((t) => t.ExpenseType === "Debit").reduce((acc, curr) => {
+    return acc += Number(curr.Amount)
+  }, 0)
+
+  const balance = credit - debit
+
+
+
+
+
+
+
+  console.log("credit", credit)
+  console.log("debit", debit)
+  console.log("balance",balance)
 
   const value = {
     expenseList,
     handleAdd,
     handleDelete,
     handleEdit,
-    editVal
+    editVal,
+    credit,
+    debit,
+    balance
   };
 
   return (
