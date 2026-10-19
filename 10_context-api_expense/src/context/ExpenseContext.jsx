@@ -22,7 +22,7 @@ const ExpenseContext = ({ children }) => {
       Description: "spider man 2",
       Amount: 500,
       Date: "2026-10-15",
-      Category: "general expense",
+      Category: "General Expense",
       ExpenseType: "Debit",
     },
     {
@@ -31,7 +31,7 @@ const ExpenseContext = ({ children }) => {
       Description: "Cricket",
       Amount: 1000,
       Date: "2026-10-20",
-      Category: "general expense",
+      Category: "General Expense",
       ExpenseType: "Debit",
     },
   ];
