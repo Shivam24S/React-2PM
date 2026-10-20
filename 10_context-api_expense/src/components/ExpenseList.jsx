@@ -43,10 +43,32 @@ const ExpenseList = () => {
       expenseQuery.ExpenseType === "all"
         ? true
         : l.ExpenseType === expenseQuery.ExpenseType,
-    ).filter((l) => expenseQuery.Category === "all" ? true : l.Category === expenseQuery.Category)
+    )
+    .filter((l) =>
+      expenseQuery.Category === "all"
+        ? true
+        : l.Category === expenseQuery.Category,
+    );
 
+  const sortedList = [...filterList].sort((a, b) => {
+    if (expenseQuery.sortBy === "asc") {
+      return a.id - b.id;
+    }
 
-  console.log("filter", filterList)
+    if (expenseQuery.sortBy === "desc") {
+      return b.id - a.id;
+    }
+
+    if (expenseQuery.sortBy === "moneyAsc") {
+      return Number(a.Amount) - Number(b.Amount);
+    }
+
+    if (expenseQuery.sortBy === "moneyDesc") {
+      return Number(b.Amount) - Number(a.Amount);
+    }
+  });
+
+  console.log("filter", filterList);
   return (
     <>
       <form onSubmit={handleSubmit}>
@@ -103,50 +125,54 @@ const ExpenseList = () => {
 
         <button type="submit">search</button>
 
-        <button onClick={handleReset}>
-          Clear all filter
-        </button>
+        <button onClick={handleReset}>Clear all filter</button>
       </form>
 
       <br />
       <br />
 
-      <table border={2}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Amount</th>
-            <th>Date</th>
-            <th>Category</th>
-            <th>ExpenseType</th>
-            <th colSpan={2}>Action</th>
-          </tr>
-        </thead>
+      {
+        sortedList.length === 0 ? <p>no data found</p> :
+          (
 
-        <tbody>
-          {filterList.map((t, index) => {
-            return (
-              <tr key={t.id}>
-                <td>{index + 1}</td>
-                <td>{t.Title}</td>
-                <td>{t.Description}</td>
-                <td>{t.Amount}</td>
-                <td>{t.Date}</td>
-                <td>{t.Category}</td>
-                <td>{t.ExpenseType}</td>
-                <td>
-                  <button onClick={() => handleEdit(t.id)}>Edit</button>
-                </td>
-                <td>
-                  <button onClick={() => handleDelete(t.id)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            <table border={2}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>ExpenseType</th>
+                  <th colSpan={2}>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {sortedList.map((t, index) => {
+                  return (
+                    <tr key={t.id}>
+                      <td>{index + 1}</td>
+                      <td>{t.Title}</td>
+                      <td>{t.Description}</td>
+                      <td>{t.Amount}</td>
+                      <td>{t.Date}</td>
+                      <td>{t.Category}</td>
+                      <td>{t.ExpenseType}</td>
+                      <td>
+                        <button onClick={() => handleEdit(t.id)}>Edit</button>
+                      </td>
+                      <td>
+                        <button onClick={() => handleDelete(t.id)}>Delete</button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )
+      }
     </>
   );
 };
