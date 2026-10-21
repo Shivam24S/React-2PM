@@ -19,14 +19,14 @@ const App = () => {
 
   return (
     <>
-      {/* <Add />
-    <br /><br /><br />
-    <ExpenseStats/>
-    <br /><br />
-    <ExpenseList/> */}
+      <Add />
+      <br /><br /><br />
+      <ExpenseStats />
+      <br /><br />
+      <ExpenseList />
 
 
-      <CounterUseReducer />
+      {/* <CounterUseReducer /> */}
 
     </>
   )
