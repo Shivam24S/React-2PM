@@ -1,18 +1,41 @@
-import { useContext } from 'react'
-import { expenseContext } from '../context/ExpenseContext'
+import { useExpense } from "../context/useExpense";
+import { formatCurrency, formatPercent } from "../utils/formatters";
 
 const ExpenseStats = () => {
+  const { credit, debit, balance, savingsRate, settings } = useExpense();
+  const curr = settings?.currency || "INR";
 
-    const { credit, debit, balance } = useContext(expenseContext)
+  return (
+    <div className="summary-cards-grid">
+      <div className="stat-card">
+        <span className="stat-card-label">Total Credit (Income)</span>
+        <div className="stat-card-value" style={{ color: "var(--income)" }}>
+          {formatCurrency(credit, curr)}
+        </div>
+      </div>
 
-    return (
-        <>
+      <div className="stat-card">
+        <span className="stat-card-label">Total Debit (Expense)</span>
+        <div className="stat-card-value" style={{ color: "var(--expense)" }}>
+          {formatCurrency(debit, curr)}
+        </div>
+      </div>
 
-            <h1>credit {credit}</h1>
-            <h1>debit {debit}</h1>
-            <h1>balance {balance}</h1>
-        </>
-    )
-}
+      <div className="stat-card">
+        <span className="stat-card-label">Net Balance</span>
+        <div className="stat-card-value" style={{ color: balance >= 0 ? "var(--text-main)" : "var(--expense)" }}>
+          {formatCurrency(balance, curr)}
+        </div>
+      </div>
 
-export default ExpenseStats
+      <div className="stat-card">
+        <span className="stat-card-label">Savings Rate</span>
+        <div className="stat-card-value">
+          {formatPercent(savingsRate)}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ExpenseStats;
