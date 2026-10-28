@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { increment } from './features/counterSlice'
+import { custom, customDecrement, decrement, increment, reset } from './features/counterSlice'
 
 
 const App = () => {
@@ -11,6 +11,9 @@ const App = () => {
   const dispatch = useDispatch()
 
 
+  const [number, setNumber] = useState(0)
+
+
   return (
     <>
 
@@ -18,7 +21,20 @@ const App = () => {
 
       <br />
 
+      <input type="number" placeholder='enter custom number' value={number} onChange={(e) => setNumber(e.target.value)} />
+
       <button onClick={() => dispatch(increment())}  >increment</button>
+
+      <button onClick={() => dispatch(decrement())}  >decrement</button>
+
+      <button onClick={() => dispatch(custom(number))} >custom increment</button>
+
+      <button onClick={() => dispatch(customDecrement(number))} >custom decrement</button>
+
+      <button onClick={() => dispatch(reset())} >reset</button>
+
+
+
     </>
   )
 }
