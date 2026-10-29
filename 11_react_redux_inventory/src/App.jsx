@@ -1,42 +1,23 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { custom, customDecrement, decrement, increment, reset } from './features/counterSlice'
-
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  custom,
+  customDecrement,
+  decrement,
+  increment,
+  reset,
+} from "./features/counterSlice";
+import Add from "./components/Add";
+import Counter from "./components/Counter";
 
 const App = () => {
-
-
-  const { count } = useSelector((state) => state.counter)
-
-  const dispatch = useDispatch()
-
-
-  const [number, setNumber] = useState(0)
-
-
   return (
     <>
+      {/* <Counter /> */}
 
-      <h1>{count}</h1>
-
-      <br />
-
-      <input type="number" placeholder='enter custom number' value={number} onChange={(e) => setNumber(e.target.value)} />
-
-      <button onClick={() => dispatch(increment())}  >increment</button>
-
-      <button onClick={() => dispatch(decrement())}  >decrement</button>
-
-      <button onClick={() => dispatch(custom(number))} >custom increment</button>
-
-      <button onClick={() => dispatch(customDecrement(number))} >custom decrement</button>
-
-      <button onClick={() => dispatch(reset())} >reset</button>
-
-
-
+      <Add />
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
