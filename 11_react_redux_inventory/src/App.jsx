@@ -9,13 +9,15 @@ import {
 } from "./features/counterSlice";
 import Add from "./components/Add";
 import Counter from "./components/Counter";
+import List from "./components/List";
 
 const App = () => {
   return (
     <>
       {/* <Counter /> */}
 
-      <Add />
+      <Add /><br /><br />
+      <List />
     </>
   );
 };
